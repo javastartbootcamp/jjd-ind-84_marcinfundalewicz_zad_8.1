@@ -4,14 +4,44 @@ public class Group {
     private String groupCode;
     private String subjectName;
     Lecturer lecturer;
-    Student student;
+    public Student[] students = new Student[30];
+    public Grade[] grades = new Grade[30];
+    public int count;
 
-    public Student getStudent() {
-        return student;
+    void addStudent(Student student) {
+        students[count] = student;
+        count++;
     }
 
-    public void setStudent(Student student) {
-        this.student = student;
+    Student findStudent(int index) {
+        for (int i = 0; i < count; i++) {
+            if (students[i].getIndex() != 0) {
+                return students[i];
+            }
+        }
+        return null;
+    }
+
+    void addGrade(Grade grade) {
+        grades[count] = grade;
+        count++;
+    }
+
+    Grade findGrade(double grade) {
+        for (int i = 0; i < count; i++) {
+            if (grades[i].getGrade() != 0) {
+                return grades[i];
+            }
+        }
+        return null;
+    }
+
+    public Student[] getStudents() {
+        return students;
+    }
+
+    public void setStudents(Student[] students) {
+        this.students = students;
     }
 
     public String getGroupCode() {

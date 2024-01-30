@@ -4,8 +4,6 @@ public class Student {
     private int index;
     private String firstName;
     private String lastName;
-    Grade grade;
-    Group group;
 
     public int getIndex() {
         return index;
