@@ -1,16 +1,17 @@
 package pl.javastart.task;
 
 import javax.swing.plaf.basic.BasicFileChooserUI;
+import java.util.Arrays;
 
 public class UniversityApp {
-    public Lecturer[] lecturers = new Lecturer[100];
-    public Group[] groups = new Group[100];
-    public Student[] students = new Student[100];
-    public int lecturersCount = 0;
-    public int groupCount = 0;
-    public int studentCount = 0;
-    public Grade[] grades = new Grade[100];
-    public int gradesCount = 0;
+    private Lecturer[] lecturers = new Lecturer[100];
+    private Group[] groups = new Group[100];
+    private Student[] students = new Student[100];
+    private Grade[] grades = new Grade[100];
+    private int lecturersCount = 0;
+    private int groupsCount = 0;
+    private int studentsCount = 0;
+    private int gradesCount = 0;
 
     /**
      * Tworzy prowadzącego zajęcia.
@@ -24,15 +25,18 @@ public class UniversityApp {
      */
 
     public void createLecturer(int id, String degree, String firstName, String lastName) {
+        if (findLecturerById(id) != null) {
+            System.out.println("Prowadzący z id " + id + " już istnieje");
+            return;
+        }
+        if (lecturersCount >= lecturers.length) {
+            lecturers = Arrays.copyOf(lecturers, lecturers.length * 2);
+        }
         Lecturer lecturer = new Lecturer();
         lecturer.setId(id);
         lecturer.setDegree(degree);
         lecturer.setFirstName(firstName);
         lecturer.setLastName(lastName);
-        if (findLecturerById(id) != null) {
-            System.out.println("Prowadzący z id " + id + " już istnieje");
-            return;
-        }
         lecturers[lecturersCount] = lecturer;
         lecturersCount++;
     }
@@ -59,21 +63,21 @@ public class UniversityApp {
      */
 
     public void createGroup(String code, String name, int lecturerId) {
+        if (findGroupByGroupCode(code) != null) {
+            System.out.println("Grupa " + code + " już istnieje");
+            return;
+        }
         Group group = new Group();
         group.setGroupCode(code);
         group.setSubjectName(name);
         group.lecturer = new Lecturer();
         group.lecturer.setId(lecturerId);
-        if (findGroupByGroupCode(code) != null) {
-            System.out.println("Grupa " + code + " już istnieje");
-            return;
-        }
-        groups[groupCount] = group;
-        groupCount++;
+        groups[groupsCount] = group;
+        groupsCount++;
     }
 
     private Group findGroupByGroupCode(String code) {
-        for (int i = 0; i < groupCount; i++) {
+        for (int i = 0; i < groupsCount; i++) {
             if (code.equals(groups[i].getGroupCode())) {
                 return groups[i];
             }
@@ -93,37 +97,23 @@ public class UniversityApp {
      */
 
     public void addStudentToGroup(int index, String groupCode, String firstName, String lastName) {
-        //prosilbym jeszcze raz o wytlumaczenie tworzenia metody findStudent i AddStudent, czy te metody zamiast tworzenia
-        // w klasie Group mozna stworzyc w UniversityApp
-        //czy jezeli stworze licznik count w klasie Group to czy musze definiowac jego wartosc od razu na 0 np. int count = 0 czy wystarczy int count;
-        //czy jezeli mam count zdefiniowany w klasie Group to jak sie to ma do wywolywania count w innych metodach
-        // void metoda1() {
-        //count++ }
-        // void metoda2() {
-        //count++ }
-        //metoda1()
-        //metoda2()
-        //czy po wywolaniu metody 1 oraz 2 licznik bedzie 2 czy licznik jest jakby osobno przypisany do kazdej metody
         Group groupByGroupCode = findGroupByGroupCode(groupCode);
         if (groupByGroupCode == null) {
             System.out.println("Grupa " + groupCode + " nie istnieje");
             return;
         }
-        for (int i = 0; i < groupCount; i++) {
-            if (groups[i].getGroupCode().equals(groupCode) && groups[i].findStudent(index) == null) {
-                Student student = new Student();
-                student.setFirstName(firstName);
-                student.setLastName(lastName);
-                student.setIndex(index);
-                students[studentCount] = student;
-                studentCount++;
-                groups[i].addStudent(student);
-            } else if (groups[i].getGroupCode().equals(groupCode) && groups[i].findStudent(index) != null) {
-                System.out.println("Student o indeksie " + index + " jest już zapisany do grupy " + groupCode);
-            }
+        if (groupByGroupCode.findStudent(index) != null) {
+            System.out.println("Student o indeksie " + index + " jest już zapisany do grupy " + groupCode);
+            return;
         }
+        Student student = new Student();
+        student.setFirstName(firstName);
+        student.setLastName(lastName);
+        student.setIndex(index);
+        students[studentsCount] = student;
+        studentsCount++;
+        groupByGroupCode.addStudent(student);
     }
-
 
     /**
      * Wyświetla informacje o grupie w zadanym formacie.
@@ -144,7 +134,7 @@ public class UniversityApp {
         if (findGroupByGroupCode(groupCode) == null) {
             System.out.println("Grupa " + groupCode + " nie znaleziona");
         } else {
-            for (int i = 0; i < groupCount; i++) {
+            for (int i = 0; i < groupsCount; i++) {
                 if (groupCode.equals(groups[i].getGroupCode())) {
                     System.out.print("Kod: ");
                     System.out.println(groups[i].getGroupCode());
@@ -155,7 +145,7 @@ public class UniversityApp {
                     System.out.print(lecturers[i].getFirstName() + " ");
                     System.out.println(lecturers[i].getLastName());
                     System.out.println("Uczestnicy:");
-                    for (int j = 0; j < studentCount; j++) {
+                    for (int j = 0; j < studentsCount; j++) {
                         if (groupCode.equals(groups[j].getGroupCode())) {
                             System.out.print(students[j].getIndex() + " ");
                             System.out.print(students[j].getFirstName() + " ");
@@ -183,29 +173,27 @@ public class UniversityApp {
      */
 
     public void addGrade(int studentIndex, String groupCode, double grade) {
-        //prosilbym o sprawdzenie metody findGrade i AddGrade, czy te metody zamiast tworzenia w klasie Group mozna stworzyc w UniversityApp
-        //czy jeszcze potrzebne sa jakies warunki lub czego brakuje w metodzie addGrade lub klasie Group do pelnej funkcjonalnosci
         Group groupByGroupCode = findGroupByGroupCode(groupCode);
         if (groupByGroupCode == null) {
             System.out.println("Grupa " + groupCode + " nie istnieje");
             return;
         }
-        for (int i = 0; i < groupCount; i++) {
-            if (groups[i].getGroupCode().equals(groupCode) && groups[i].findStudent(studentIndex) != null  && groups[i].findGrade(grade) == null) {
-                Grade finalGrade = new Grade();
-                finalGrade.setGrade(grade);
-                finalGrade.student = new Student();
-                finalGrade.student.setIndex(studentIndex);
-                finalGrade.group = new Group();
-                finalGrade.group.setGroupCode(groupCode);
-                grades[gradesCount] = finalGrade;
-                gradesCount++;
-                groups[i].addGrade(finalGrade);
-            } else if (groups[i].getGroupCode().equals(groupCode) && groups[i].findStudent(studentIndex) != null) {
-                System.out.println("Student o indeksie " + studentIndex + " nie jest zapisany do grupy " + groupCode);
-            } else if (groups[i].getGroupCode().equals(groupCode) && groups[i].findGrade(grade) != null) {
-                System.out.println("Student o indeksie " + studentIndex + " ma już ocenę w grupie " + groupCode);
+        Student student = groupByGroupCode.findStudent(studentIndex);
+        if (student == null) {
+            System.out.println("Student o indeksie " + studentIndex + " nie jest zapisany do grupy " + groupCode);
+            return;
+        }
+        for (int i = 0; i < gradesCount; i++) {
+            if (grades[i].getGrade() != 0) {
+                System.out.println("Student o indeksie " + studentIndex + " ma już wystawioną ocenę dla grupy " + groupCode);
+                return;
             }
+            Grade finalGrade = new Grade();
+            finalGrade.setGrade(grade);
+            finalGrade.student = student;
+            finalGrade.group = groupByGroupCode;
+            grades[gradesCount] = finalGrade;
+            gradesCount++;
         }
     }
 
@@ -221,7 +209,7 @@ public class UniversityApp {
     public void printGradesForStudent(int index) {
         for (int i = 0; i < gradesCount; i++) {
             if (index == grades[i].student.getIndex()) {
-                System.out.println(groups[i].getSubjectName() + ": " + grades[i].getGrade());
+                System.out.println(grades[i].group.getSubjectName() + ": " + grades[i].getGrade());
             }
         }
     }
@@ -257,7 +245,7 @@ public class UniversityApp {
      * 189521 Anna Kowalska
      */
     public void printAllStudents() {
-        for (int i = 0; i < studentCount; i++) {
+        for (int i = 0; i < studentsCount; i++) {
             System.out.printf("%d %s %s \n", students[i].getIndex(),
                     students[i].getFirstName(), students[i].getLastName());
         }
