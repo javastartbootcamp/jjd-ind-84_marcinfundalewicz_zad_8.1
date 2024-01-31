@@ -236,8 +236,12 @@ public class UniversityApp {
         }
         for (int i = 0; i < gradesCount; i++) {
             if (groupCode.equals(grades[i].getGroup().getGroupCode())) {
-                System.out.printf("%d %s %s: %.1f \n", grades[i].getStudent().getIndex(),
-                        grades[i].getStudent().getFirstName(), grades[i].getStudent().getLastName(), grades[i].getGrade());
+                System.out.print(grades[i].getStudent().getIndex() + " ");
+                System.out.print(grades[i].getStudent().getFirstName() + " ");
+                System.out.print(grades[i].getStudent().getLastName());
+                System.out.print(":");
+                System.out.print(" " + grades[i].getGrade());
+                System.out.println();
             }
         }
     }
