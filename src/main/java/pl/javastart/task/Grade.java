@@ -1,9 +1,9 @@
 package pl.javastart.task;
 
 public class Grade {
-    public Group group;
-    public Student student;
-    public double grade;
+    private Group group;
+    private Student student;
+    private double grade;
 
     public double getGrade() {
         return grade;
@@ -11,6 +11,22 @@ public class Grade {
 
     public void setGrade(double grade) {
         this.grade = grade;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
     }
 }
 

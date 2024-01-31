@@ -14,16 +14,19 @@ public class Main {
         universityApp.createGroup("px-2022", "Programowanie Obiektowe", 2);
 
         universityApp.addStudentToGroup(179128, "pp-2022", "Marcin", "Abacki");
+        universityApp.addStudentToGroup(179128, "pp-2022", "Marcin", "Abacki");
+        universityApp.addStudentToGroup(179129, "po-2022", "Adam", "Browarski");
         universityApp.addStudentToGroup(179129, "po-2022", "Adam", "Browarski");
 
 //        universityApp.printAllStudents();
         universityApp.addGrade(179128, "pp-2022", 5);
+        universityApp.addGrade(179128, "po-2022", 5);
         universityApp.addGrade(179129, "po-2022", 5.5);
 
 //
-        universityApp.printGroupInfo("pp-2022");
+//        universityApp.printGroupInfo("pp-2022");
 //        universityApp.printGroupInfo("po-2022");
 //        universityApp.printGradesForStudent(179128);
-//        universityApp.printGradesForGroup("po-2022");
+//        universityApp.printGradesForGroup("pp-2022");
     }
 }

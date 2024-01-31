@@ -247,7 +247,7 @@ class UniversityAppTest {
 
         // then
         assertThat(outContent.toString()).contains("Marcin Abacki: 5");
-        assertThat(outContent.toString()).contains("Adam Browarski: 4.5");
+        assertThat(outContent.toString()).contains("Adam Browarski: 4,5");
     }
 
     @Test

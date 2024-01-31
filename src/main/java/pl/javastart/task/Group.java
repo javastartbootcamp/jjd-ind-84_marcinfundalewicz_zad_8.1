@@ -14,7 +14,7 @@ public class Group {
 
     Student findStudent(int index) {
         for (int i = 0; i < count; i++) {
-            if (students[i].getIndex() != 0) {
+            if (index == students[i].getIndex()) {
                 return students[i];
             }
         }
@@ -51,5 +51,13 @@ public class Group {
 
     public void setLecturer(Lecturer lecturer) {
         this.lecturer = lecturer;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }

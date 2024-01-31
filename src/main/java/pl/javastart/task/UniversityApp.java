@@ -103,7 +103,7 @@ public class UniversityApp {
             return;
         }
         if (groupByGroupCode.findStudent(index) != null) {
-            System.out.println("Student o indeksie " + index + " jest już zapisany do grupy " + groupCode);
+            System.out.println("Student o indeksie " + index + " jest już w grupie " + groupCode);
             return;
         }
         Student student = new Student();
@@ -140,12 +140,13 @@ public class UniversityApp {
             System.out.print("Nazwa: ");
             System.out.println(group.getSubjectName());
             System.out.print("Prowadzący: ");
-            System.out.print(group.lecturer.getDegree() + " ");
-            System.out.print(group.lecturer.getFirstName() + " ");
-            System.out.println(group.lecturer.getLastName());
+            Lecturer prowadzacy = findLecturerById(group.lecturer.getId());
+            System.out.print(prowadzacy.getDegree() + " ");
+            System.out.print(prowadzacy.getFirstName() + " ");
+            System.out.println(prowadzacy.getLastName());
             System.out.println("Uczestnicy:");
             Student[] studentsInGroup = group.getStudents();
-            for (int i = 0; i < studentsInGroup.length; i++) {
+            for (int i = 0; i < group.getCount(); i++) {
                 System.out.print(studentsInGroup[i].getIndex() + " ");
                 System.out.print(studentsInGroup[i].getFirstName() + " ");
                 System.out.println(studentsInGroup[i].getLastName() + " ");
@@ -179,28 +180,27 @@ public class UniversityApp {
             System.out.println("Student o indeksie " + studentIndex + " nie jest zapisany do grupy " + groupCode);
             return;
         }
-//        if (findGradeByStudentAndGroup(studentIndex, groupCode) != null) {
-//            System.out.println("Student o indeksie " + studentIndex + " ma już wystawioną ocenę dla grupy " + groupCode);
-//            return;
-//        }
+        if (findGradeByStudentAndGroup(studentIndex, groupCode) != null) {
+            System.out.println("Student o indeksie " + studentIndex + " ma już wystawioną ocenę dla grupy " + groupCode);
+            return;
+        }
         Grade finalGrade = new Grade();
         finalGrade.setGrade(grade);
-        finalGrade.student = student;
-        finalGrade.group = groupByGroupCode;
+        finalGrade.setStudent(student);
+        finalGrade.setGroup(groupByGroupCode);
         grades[gradesCount] = finalGrade;
         gradesCount++;
 
     }
 
-//    private Grade findGradeByStudentAndGroup(int studentIndex, String groupCode) {
-//        for (int i = 0; i < gradesCount; i++) {
-//            if (grade.student.getIndex() == studentIndex && grade.group.getGroupCode().equals(groupCode)) {
-//                return grade;
-//            }
-//        }
-//        return null;
-//    }
-
+    private Grade findGradeByStudentAndGroup(int studentIndex, String groupCode) {
+        for (int i = 0; i < gradesCount; i++) {
+            if (grades[i].getStudent().getIndex() == studentIndex && grades[i].getGroup().getGroupCode().equals(groupCode)) {
+                return grades[i];
+            }
+        }
+        return null;
+    }
 
     /**
      * Wyświetla wszystkie oceny studenta.
@@ -213,8 +213,8 @@ public class UniversityApp {
 
     public void printGradesForStudent(int index) {
         for (int i = 0; i < gradesCount; i++) {
-            if (index == grades[i].student.getIndex()) {
-                System.out.println(grades[i].group.getSubjectName() + ": " + grades[i].getGrade());
+            if (index == grades[i].getStudent().getIndex()) {
+                System.out.println(grades[i].getGroup().getSubjectName() + ": " + grades[i].getGrade());
             }
         }
     }
@@ -235,9 +235,9 @@ public class UniversityApp {
             return;
         }
         for (int i = 0; i < gradesCount; i++) {
-            if (groupCode.equals(grades[i].group.getGroupCode())) {
-                System.out.printf("%d %s %s: %.1f \n", grades[i].student.getIndex(),
-                        grades[i].student.getFirstName(), grades[i].student.getLastName(), grades[i].getGrade());
+            if (groupCode.equals(grades[i].getGroup().getGroupCode())) {
+                System.out.printf("%d %s %s: %.1f \n", grades[i].getStudent().getIndex(),
+                        grades[i].getStudent().getFirstName(), grades[i].getStudent().getLastName(), grades[i].getGrade());
             }
         }
     }
