@@ -1,9 +1,9 @@
 package pl.javastart.task;
 
 public class Grade {
-    Group group;
-    Student student;
-    private double grade;
+    public Group group;
+    public Student student;
+    public double grade;
 
     public double getGrade() {
         return grade;
@@ -13,3 +13,5 @@ public class Grade {
         this.grade = grade;
     }
 }
+
+
